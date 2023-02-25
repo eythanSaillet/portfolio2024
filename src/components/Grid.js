@@ -7,6 +7,30 @@ const Container = styled.div`
 	height: 100vh;
 	background: red;
 	overflow: hidden;
+	cursor: none;
+
+	.cursor {
+		width: 0;
+		height: 0;
+		position: absolute;
+		top: -100px;
+		left: -100px;
+		z-index: 1000;
+		mix-blend-mode: difference;
+		.line {
+			position: absolute;
+			left: -15px;
+			width: 30px;
+			height: 2px;
+			background: var(--white);
+		}
+		.line1 {
+			transform: rotate(45deg);
+		}
+		.line2 {
+			transform: rotate(-45deg);
+		}
+	}
 	.overlayGrid {
 		width: 100vw;
 		height: 100vh;
@@ -72,6 +96,9 @@ const Container = styled.div`
 function Grid() {
 	const contentGrid = useRef()
 	const isMoving = useRef(false)
+	const cursor = useRef()
+	const cursorLine1 = useRef()
+	const cursorLine2 = useRef()
 
 	// Direction buttons
 	const rightButton = useRef()
@@ -83,8 +110,57 @@ function Grid() {
 	const downLeftButton = useRef()
 	const downRightButton = useRef()
 
+	const adaptCursor = (pos, orientation) => {
+		switch (pos) {
+			case "center":
+				gsap.to(cursorLine1.current, { duration: 0.5, x: 0, y: 0, ease: Power2.easeOut })
+				gsap.to(cursorLine2.current, { duration: 0.5, x: 0, y: 0, ease: Power2.easeOut })
+				break
+			case "left":
+				gsap.to(cursorLine1.current, { duration: 0.5, x: 0, y: "10px", ease: Power2.easeOut })
+				gsap.to(cursorLine2.current, { duration: 0.5, x: 0, y: "-10px", ease: Power2.easeOut })
+				break
+			case "right":
+				gsap.to(cursorLine1.current, { duration: 0.5, x: 0, y: "-10px", ease: Power2.easeOut })
+				gsap.to(cursorLine2.current, { duration: 0.5, x: 0, y: "10px", ease: Power2.easeOut })
+				break
+			case "up":
+				gsap.to(cursorLine1.current, { duration: 0.5, x: "10px", y: 0, ease: Power2.easeOut })
+				gsap.to(cursorLine2.current, { duration: 0.5, x: "-10px", y: 0, ease: Power2.easeOut })
+				break
+			case "down":
+				gsap.to(cursorLine1.current, { duration: 0.5, x: "-10px", y: 0, ease: Power2.easeOut })
+				gsap.to(cursorLine2.current, { duration: 0.5, x: "10px", y: 0, ease: Power2.easeOut })
+				break
+			default:
+				break
+		}
+		switch (orientation) {
+			case 1:
+				gsap.to(cursor.current, { duration: 0.5, rotation: -45, ease: Power2.easeOut })
+				break
+			case 0:
+				gsap.to(cursor.current, { duration: 0.5, rotation: 0, ease: Power2.easeOut })
+				break
+			case -1:
+				gsap.to(cursor.current, { duration: 0.5, rotation: 45, ease: Power2.easeOut })
+				break
+			default:
+				break
+		}
+	}
+
 	return (
-		<Container>
+		<Container
+			onMouseMove={(e) => {
+				cursor.current.style.top = e.clientY + "px"
+				cursor.current.style.left = e.clientX + "px"
+			}}
+		>
+			<div className="cursor" ref={cursor}>
+				<div className="line line1" ref={cursorLine1}></div>
+				<div className="line line2" ref={cursorLine2}></div>
+			</div>
 			<div className="contentGrid" ref={contentGrid}>
 				<div className="row">
 					<div className="cell"></div>
@@ -110,6 +186,9 @@ function Grid() {
 					<div
 						className="cell1"
 						ref={upLeftButton}
+						onMouseEnter={() => {
+							adaptCursor("left", -1)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("upLeft")
@@ -130,6 +209,9 @@ function Grid() {
 					<div
 						className="cell2"
 						ref={upButton}
+						onMouseEnter={() => {
+							adaptCursor("up", 0)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("up")
@@ -149,6 +231,9 @@ function Grid() {
 					<div
 						className="cell3"
 						ref={upRightButton}
+						onMouseEnter={() => {
+							adaptCursor("right", 1)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("upRight")
@@ -171,6 +256,9 @@ function Grid() {
 					<div
 						className="cell1"
 						ref={leftButton}
+						onMouseEnter={() => {
+							adaptCursor("left", 0)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("left")
@@ -187,11 +275,19 @@ function Grid() {
 						}}
 					></div>
 					<div className="colLine line1"></div>
-					<div className="cell2"></div>
+					<div
+						className="cell2"
+						onMouseEnter={() => {
+							adaptCursor("center", 0)
+						}}
+					></div>
 					<div className="colLine line2"></div>
 					<div
 						className="cell3"
 						ref={rightButton}
+						onMouseEnter={() => {
+							adaptCursor("right", 0)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("right")
@@ -213,6 +309,9 @@ function Grid() {
 					<div
 						className="cell1"
 						ref={downLeftButton}
+						onMouseEnter={() => {
+							adaptCursor("left", 1)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("downLeft")
@@ -233,6 +332,9 @@ function Grid() {
 					<div
 						className="cell2"
 						ref={downButton}
+						onMouseEnter={() => {
+							adaptCursor("down", 0)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("down")
@@ -252,6 +354,9 @@ function Grid() {
 					<div
 						className="cell3"
 						ref={downRightButton}
+						onMouseEnter={() => {
+							adaptCursor("right", -1)
+						}}
 						onClick={() => {
 							if (!isMoving.current) {
 								console.log("downRight")
