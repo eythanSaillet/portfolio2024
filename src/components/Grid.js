@@ -5,7 +5,7 @@ import gsap, { Power2 } from "gsap"
 const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
-	background: red;
+	background: var(--black);
 	overflow: hidden;
 	cursor: none;
 
@@ -31,11 +31,53 @@ const Container = styled.div`
 			transform: rotate(-45deg);
 		}
 	}
+	.gridCross {
+		width: 0;
+		height: 0;
+		position: absolute;
+		z-index: 500;
+		.line {
+			position: absolute;
+			left: -15px;
+			width: 30px;
+			height: 0.5px;
+			background: var(--white);
+		}
+		.line2 {
+			transform: rotate(90deg);
+		}
+	}
+	.gridCross1 {
+		top: calc(100vh / 3 - 1px);
+		left: calc(100vw / 3 - 0.5px);
+	}
+	.gridCross2 {
+		top: calc(100vh / 3 * 2 - 1px);
+		left: calc(100vw / 3 - 0.5px);
+	}
+	.gridCross3 {
+		top: calc(100vh / 3 - 1px);
+		left: calc(100vw / 3 * 2 - 0.5px);
+	}
+	.gridCross4 {
+		top: calc(100vh / 3 * 2 - 1px);
+		left: calc(100vw / 3 * 2 - 0.5px);
+	}
+
 	.overlayGrid {
 		width: 100vw;
 		height: 100vh;
 		position: absolute;
 		.row {
+			> div {
+				position: relative;
+			}
+			> div > .fade {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.6);
+			}
 			display: flex;
 			.cell1 {
 				width: calc(100% / 3 - 1px);
@@ -58,6 +100,60 @@ const Container = styled.div`
 		.row1 {
 			width: 100vw;
 			height: calc(100vh / 3 - 1px);
+			font-size: 11px;
+			letter-spacing: 3px;
+			position: relative;
+			.gradient {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+			}
+			.cell1 {
+				position: relative;
+				.title {
+					position: absolute;
+					top: 35px;
+					right: 50px;
+				}
+			}
+			.cell2 {
+				position: relative;
+				.index {
+					position: absolute;
+					top: 35px;
+					left: 50%;
+					transform: translateX(-50%);
+				}
+			}
+			.cell3 {
+				position: relative;
+				.contact {
+					position: absolute;
+					top: 35px;
+					left: 50px;
+				}
+			}
+		}
+		div > .cell1 {
+			.gradient {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(-80deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+			}
+		}
+		div:not(.row1) > .cell1 {
+			position: relative;
+			font-size: 22px;
+			line-height: 29px;
+			letter-spacing: 5px;
+			text-align: right;
+			span {
+				position: absolute;
+				top: 45px;
+				right: 50px;
+			}
 		}
 		.row2 {
 			width: 100vw;
@@ -87,7 +183,14 @@ const Container = styled.div`
 				min-width: calc(100% / 3);
 				width: calc(100% / 3);
 				height: 100%;
-				background: green;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				.content {
+					width: calc(100% - 50px);
+					height: calc(100% - 50px);
+					background: darkgrey;
+				}
 			}
 		}
 	}
@@ -161,6 +264,22 @@ function Grid() {
 				<div className="line line1" ref={cursorLine1}></div>
 				<div className="line line2" ref={cursorLine2}></div>
 			</div>
+			<div className="gridCross gridCross1">
+				<div className="line line1"></div>
+				<div className="line line2"></div>
+			</div>
+			<div className="gridCross gridCross2">
+				<div className="line line1"></div>
+				<div className="line line2"></div>
+			</div>
+			<div className="gridCross gridCross3">
+				<div className="line line1"></div>
+				<div className="line line2"></div>
+			</div>
+			<div className="gridCross gridCross4">
+				<div className="line line1"></div>
+				<div className="line line2"></div>
+			</div>
 			<div className="contentGrid" ref={contentGrid}>
 				<div className="row">
 					<div className="cell"></div>
@@ -169,11 +288,21 @@ function Grid() {
 				</div>
 				<div className="row">
 					<div className="cell"></div>
-					<div className="cell"></div>
-					<div className="cell"></div>
-					<div className="cell"></div>
-					<div className="cell"></div>
-					<div className="cell"></div>
+					<div className="cell">
+						<div className="content"></div>
+					</div>
+					<div className="cell">
+						<div className="content"></div>
+					</div>
+					<div className="cell">
+						<div className="content"></div>
+					</div>
+					<div className="cell">
+						<div className="content"></div>
+					</div>
+					<div className="cell">
+						<div className="content"></div>
+					</div>
 				</div>
 				<div className="row">
 					<div className="cell"></div>
@@ -183,6 +312,7 @@ function Grid() {
 			</div>
 			<div className="overlayGrid">
 				<div className="row row1">
+					<div className="gradient"></div>
 					<div
 						className="cell1"
 						ref={upLeftButton}
@@ -204,7 +334,11 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="gradient"></div>
+						<div className="fade"></div>
+						<span className="title">EYTHAN SAILLET</span>
+					</div>
 					<div className="colLine line1"></div>
 					<div
 						className="cell2"
@@ -226,7 +360,10 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+						<span className="index">01 / 13</span>
+					</div>
 					<div className="colLine line2"></div>
 					<div
 						className="cell3"
@@ -249,7 +386,10 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+						<span className="contact">CONTACT</span>
+					</div>
 				</div>
 				<div className="rowLine line1"></div>
 				<div className="row row2">
@@ -273,7 +413,15 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="gradient"></div>
+						<div className="fade"></div>
+						<span>
+							ARTISTIC
+							<br />
+							DIRECTION
+						</span>
+					</div>
 					<div className="colLine line1"></div>
 					<div
 						className="cell2"
@@ -302,7 +450,9 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+					</div>
 				</div>
 				<div className="rowLine line2"></div>
 				<div className="row row3">
@@ -327,7 +477,15 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+						<div className="gradient"></div>
+						<span>
+							3D
+							<br />
+							MOTION
+						</span>
+					</div>
 					<div className="colLine line1"></div>
 					<div
 						className="cell2"
@@ -349,7 +507,9 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+					</div>
 					<div className="colLine line2"></div>
 					<div
 						className="cell3"
@@ -372,7 +532,9 @@ function Grid() {
 							}
 							isMoving.current = true
 						}}
-					></div>
+					>
+						<div className="fade"></div>
+					</div>
 				</div>
 			</div>
 		</Container>
