@@ -1,9 +1,7 @@
-import Grid from './components/Grid'
+import Grid from "./components/Grid"
 
 function App() {
-  return (
-    <Grid/>
-  );
+	return <Grid />
 }
 
-export default App;
+export default App
