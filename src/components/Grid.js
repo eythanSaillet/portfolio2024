@@ -12,11 +12,12 @@ const Container = styled.div`
 	.cursor {
 		width: 0;
 		height: 0;
-		position: absolute;
+		position: fixed;
 		top: -100px;
 		left: -100px;
 		z-index: 1000;
 		mix-blend-mode: difference;
+		pointer-events: none;
 		.line {
 			position: absolute;
 			left: -15px;
@@ -107,7 +108,7 @@ const Container = styled.div`
 				position: absolute;
 				width: 100%;
 				height: 100%;
-				background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+				background: rgba(0, 0, 0, 0.6);
 			}
 			.cell1 {
 				position: relative;
@@ -133,14 +134,6 @@ const Container = styled.div`
 					top: 35px;
 					left: 50px;
 				}
-			}
-		}
-		div > .cell1 {
-			.gradient {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(-80deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
 			}
 		}
 		div:not(.row1) > .cell1 {
@@ -312,7 +305,7 @@ function Grid() {
 			</div>
 			<div className="overlayGrid">
 				<div className="row row1">
-					<div className="gradient"></div>
+					<div></div>
 					<div
 						className="cell1"
 						ref={upLeftButton}
@@ -335,7 +328,7 @@ function Grid() {
 							isMoving.current = true
 						}}
 					>
-						<div className="gradient"></div>
+						<div></div>
 						<div className="fade"></div>
 						<span className="title">EYTHAN SAILLET</span>
 					</div>
@@ -414,12 +407,10 @@ function Grid() {
 							isMoving.current = true
 						}}
 					>
-						<div className="gradient"></div>
+						<div></div>
 						<div className="fade"></div>
 						<span>
-							ARTISTIC
-							<br />
-							DIRECTION
+							FILM
 						</span>
 					</div>
 					<div className="colLine line1"></div>
@@ -479,7 +470,7 @@ function Grid() {
 						}}
 					>
 						<div className="fade"></div>
-						<div className="gradient"></div>
+						<div></div>
 						<span>
 							3D
 							<br />
